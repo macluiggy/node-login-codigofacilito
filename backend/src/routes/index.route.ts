@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { hello } from "../controllers/index.controller";
+import passport from "passport";
 const router = Router();
 
 router.route("/api/hello").get(hello);
@@ -12,7 +13,13 @@ router
   .get((req, res) => {
     res.render("login");
   })
-  .post((req, res) => {
-    res.send("hola mundo");
-  });
+  .post(
+    passport.authenticate("local", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+    }),
+    (req, res) => {
+      res.send("hola mundo");
+    }
+  );
 export default router;
